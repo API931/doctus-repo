@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="0a6aae4f-61df-4b17-a107-bb62d18bbcf1" >
+		<http:listener-connection host="0.0.0.0" port="${http.port}" />
+	</http:listener-config>
+	<configuration-properties doc:name="Configuration properties" doc:id="bb77ec26-231d-416a-bbfc-0b268ce2bd6e" file="Config\dev.yaml" />
+	<global-property doc:name="Global Property" doc:id="2e9cadad-7777-4ace-8132-22e52eae35fb" name="environment" value="dev" />
+	<flow name="dummyFlow" doc:id="a663dcdb-f135-42e6-a0da-f93c35d1f7b7" >
+		<http:listener doc:name="Listener" doc:id="7acd9895-adf0-4fcc-94a7-7a2acd67572d" config-ref="HTTP_Listener_config" path="/hello"/>
+		<set-payload value="Test payload" doc:name="Set Payload" doc:id="08b84331-46da-4041-96a4-cb1d7517ad2c" />
+		<ee:transform doc:name="Transform Message" doc:id="9d890a05-1be7-4273-91dd-e410af682589" >
+			<ee:message >
+				<ee:set-payload resource="mytransformfile.dwl" />
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Logger" doc:id="40dd9a43-00c8-407a-9717-0b3a71197be8" message="#[payload]"/>
+	</flow>
+</mule>
